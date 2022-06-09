@@ -42,32 +42,39 @@ AppDataSource.initialize()
     app.listen(3000);
 
     //To Search specific colums
-    const dataFind = await AppDataSource.manager.find(User, {
-      select: { firstName: true, id: true },
-      where: { age: 0, lastName: 'Saw' },
+    app.get('/user', async (req: Request, res: Response) => {
+      const dataFind = await AppDataSource.manager.find(User, {
+        select: { firstName: true, id: true },
+        where: { age: 0, lastName: 'Saw' },
+      });
+      res.json(dataFind);
     });
-    console.log(dataFind);
 
     // To insert data into table
-    const dataInsert = await AppDataSource.manager.insert(User, {
-      firstName: 'Alberto',
-      lastName: 'Pedro',
-      age: 55,
+    app.post('/user', async (req: Request, res: Response) => {
+      const dataInsert = await AppDataSource.manager.insert(User, {
+        firstName: 'Prueba4',
+        lastName: 'Martin',
+        age: 65,
+      });
+      res.json({ affetedRows: dataInsert.raw.affectedRows });
     });
-    console.log(dataInsert);
-
     // DELETE registry from database
-    const dataDelete = await AppDataSource.manager.delete(User, { id: '1' });
-    console.log(dataDelete);
+    app.delete('/user', async (req: Request, res: Response) => {
+      const dataDelete = await AppDataSource.manager.delete(User, { id: '17' });
+      res.json({ Delete: dataDelete });
+    });
 
     // To update
-    const updateData = await AppDataSource.manager
-      .createQueryBuilder()
-      .update(User)
-      .set({ firstName: 'Prueba' })
-      .where('id=:id', { id: 2 })
-      .execute();
-    console.log(updateData);
+    app.put('/user', async (req: Request, res: Response) => {
+      const updateData = await AppDataSource.manager
+        .createQueryBuilder()
+        .update(User)
+        .set({ firstName: 'Prueba4' })
+        .where('id=:id', { id: 5 })
+        .execute();
+      res.json({ affected: updateData });
+    });
 
     console.log(
       'Express server has started on port 3000. Open http://localhost:3000/users to see results'
