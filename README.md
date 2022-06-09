@@ -1,4 +1,4 @@
-# Awesome Project Build with TypeORM with EXPRESS
+# Awesome Project Build with TypeORM with EXPRESS and Restful Routes
 
 Steps to run this project:
 
