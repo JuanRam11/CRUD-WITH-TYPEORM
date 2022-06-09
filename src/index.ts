@@ -12,10 +12,11 @@ AppDataSource.initialize()
     const app = express();
     const cors = require('cors');
     app.use(bodyParser.json());
-    /*    app.use(cors, {
-
+    app.use(
+      cors() /* {
       origin: 'https://127.0.0.1:3000',
-    }); */
+    } */
+    );
 
     // register express routes from defined application routes
     Routes.forEach((route) => {
@@ -60,7 +61,7 @@ AppDataSource.initialize()
     });
 
     //To find specific users using id on the URL
-    app.get('/user:id', async (req: Request, res: Response) => {
+    app.get('/user/:id', async (req: Request, res: Response) => {
       const id = req.params.id;
       const dataFind = await AppDataSource.manager.find(User, {
         /*         select: { firstName: true, id: true }, */
@@ -83,20 +84,22 @@ AppDataSource.initialize()
     });
 
     // DELETE registry from database
-    app.delete('/user:id', async (req: Request, res: Response) => {
-      const id = req.params.id;
+    app.delete('/user', async (req: Request, res: Response) => {
+      const id = req.body.id;
       const dataDelete = await AppDataSource.manager.delete(User, { id: id });
       res.json({ Delete: dataDelete });
     });
 
     // To update
-    app.put('/user:id', async (req: Request, res: Response) => {
-      const id = req.params.id;
-      const firstName = req.params.firstName;
+    app.put('/user', async (req: Request, res: Response) => {
+      const id = req.body.id;
+      const firstName = req.body.firstName;
+      const lastName = req.body.lastName;
+      const age = req.body.age;
       const updateData = await AppDataSource.manager
         .createQueryBuilder()
         .update(User)
-        .set({ firstName: firstName })
+        .set({ firstName: firstName, lastName: lastName, age: age })
         .where('id=:id', { id: id })
         .execute();
       res.json({ affected: updateData });
