@@ -10,7 +10,12 @@ AppDataSource.initialize()
   .then(async () => {
     // create express app
     const app = express();
+    const cors = require('cors');
     app.use(bodyParser.json());
+    /*    app.use(cors, {
+
+      origin: 'https://127.0.0.1:3000',
+    }); */
 
     // register express routes from defined application routes
     Routes.forEach((route) => {
@@ -41,6 +46,8 @@ AppDataSource.initialize()
     // start express server
     app.listen(3000);
 
+    /*    app.use(bodyParser.urlencoded({ extended: false })); */
+
     //TO SEARCH ALL USERS //To Search specific colums
     app.get('/user', async (req: Request, res: Response) => {
       const dataFind = await AppDataSource.manager.find(
@@ -62,7 +69,7 @@ AppDataSource.initialize()
       res.json(dataFind);
     });
 
-    // To insert data into table
+    // To insert data into table or CREATE USER
     app.post('/user', async (req: Request, res: Response) => {
       const firstName = req.body.firstName;
       const lastName = req.body.lastName;
